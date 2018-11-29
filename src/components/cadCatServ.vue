@@ -26,13 +26,14 @@
         </b-form-input>
       </b-form-group>
       <b-form-group>
-        <b-form-select v-model="selected" class="mb-3">
-          <option v-for="pj in pessoaJuridica" v-bind:value="pj.value">{{pj.nomeFantasia}}</option>
+        <b-form-select v-model="selected" class="mb-3" placeholder="hsddvkvjhnb:">
+          <option v-for="pj in pessoaJuridica" :value="pj.id">{{pj.nomeFantasia}}</option>
         </b-form-select>
        <!-- :options="pessoaJuridica" -->
       </b-form-group>
-      </b-form>
+
       <b-button type="submit" variant="primary">Salvar</b-button>
+      </b-form>
       </div>
       
   </div>
@@ -47,16 +48,17 @@ export default {
     return {
       selected: "",
       pessoaJuridica: [],
-      name: "",
+      nome: "",
       descricao: ""
     };
   },
   methods: {
     onSubmit(evt) {
       evt.preventDefault();
+     
       return axios({
         method: "post",
-        url: "http://localhost:51917/api/categoria/" + this.idAdm,
+        url: "http://localhost:51917/api/categoria/" + localStorage.getItem("idAdm") + "/" + this.selected,
         data: {
           nome: this.nome,
           descricao: this.descricao
@@ -81,6 +83,7 @@ export default {
         this.pessoaJuridica = response.data;
         console.log(this.pessoaJuridica);
         console.info(response.data[0]["cnpj"]);
+         console.log("---------------"+selected);
       })
       .catch(error => console.log(error));
   }

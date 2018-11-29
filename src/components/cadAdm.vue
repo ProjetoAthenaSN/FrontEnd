@@ -38,7 +38,7 @@
             </b-nav>
 
         <b-button-group size="sm">
-                  <b-button id="cadastrar" type="submit" v-for="btn in buttons" :pressed.sync="btn.state" :variant="btn.variant" :key="btn.variant" @click="login">
+                  <b-button id="cadastrar" type="submit" v-for="btn in buttons" :pressed.sync="btn.state" :variant="btn.variant" :key="btn.variant">
                     {{ btn.caption }}
                   </b-button>
                 </b-button-group>
@@ -69,7 +69,9 @@ export default {
       //alert("Administrador Cadastrado!");
       return axios({
         method: "post",
-        url: "http://athenasapi.azurewebsites.net/api/administrador",
+        url: "http://localhost:51917/api/token",
+        url: "http://localhost:51917/api/administrador",
+      //url: "http://athenasapi.azurewebsites.net/api/administrador",
         data: {
           NomeCompleto: this.NomeCompleto,
           Email: this.email,
@@ -78,13 +80,34 @@ export default {
        
       }).then((response) => {
         console.info(response.data);
+        const token = response.data.token;
+        localStorage.setItem("token", response.data.token);
+        console.log(response.data.token)
        this.$router.push('/cadPessoaJud');
       }).catch(err => {
         this.erro = 'Dados incorretos';
       });
       
       
-    }
+    }/*,
+    login() {
+     axios({
+       url: "http://localhost:51917/api/token",
+      // url: "http://athenasapi.azurewebsites.net/api/token",
+       method: "POST",
+       data: {
+         Email: this.email,
+         Senha: this.senha
+       }
+     })
+      .then(response =>{
+        const token = response.data.token;
+        localStorage.setItem("token", response.data.token);
+        console.log(response.data.token)
+      })
+      .catch(err => {
+      });
+    },*/
   }
 };
 

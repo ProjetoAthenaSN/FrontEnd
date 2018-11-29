@@ -121,9 +121,8 @@ export default {
 
       return axios({
         method: "post",
-        url:
-          "http://athenasapi.azurewebsites.net/api/pessoaJuridica/" +
-          localStorage.getItem("idAdm"),
+        url: "http://localhost:51917/api/token",
+      //url: "http://athenasapi.azurewebsites.net/api/pessoaJuridica/" + localStorage.getItem("idAdm"),
         data: {
           cnpj: this.cnpj,
           nomeFantasia: this.nomeFantasia,
@@ -164,6 +163,7 @@ fetchCep(){
           this.endereco.uf= response.data.uf;
           console.log(this.cep);
           console.log(response.data);
+          alert("heyyyyy");
         })
         .catch(error => {
           console.log(

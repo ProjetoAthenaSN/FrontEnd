@@ -7,16 +7,17 @@
   <b-form-group>
   <b-form-input v-model="nome" type="text" placeholder="Nome:" id="form´s"></b-form-input>
   <b-form-input v-model="descricao" type="text" placeholder="Descrição:" id="form´s"></b-form-input>
-  <b-form-select v-model="selected" class="mb-3">
+  <b-form-select v-model="selected" class="mb-3" >
           <option v-for="pj in pessoaJuridica" v-bind:value="pj.value">{{pj.nomeFantasia}}</option>
         </b-form-select>
 
     <b-form-select v-model="selected" class="mb-3">
-          <option v-for="cat in categoria" v-bind:value="cat.value">{{cat.nome}}</option>
+          <option v-for="cat in categoria" v-bind:value="cat.id">{{cat.nome}}</option>
         </b-form-select>
   </b-form-group>
+  <b-button href="#" type="submit" variant="primary" id="">Cadastrar</b-button>
   </b-form>
-  	<b-button href="#" variant="primary" id="">Cadastrar</b-button>
+  	
    <p>
    <router-link v-bind:to="{ name: 'menu' }" class="card-text" id="x">X</router-link>
    </p>
@@ -26,6 +27,7 @@
 
 <script>
 /*import "./assets/stylesheets/main.css";*/
+import axios from "axios";
 export default {
   name: 'Servico',
   data () {
@@ -42,7 +44,7 @@ export default {
       evt.preventDefault();
       return axios({
         method: "post",
-        url: "http://localhost:51917/api/servico/" + this.idAdm,
+        url: "http://localhost:51917/api/servico/" + localStorage.getItem("idAdm") + "/",
         data: {
           nome: this.nome,
           descricao: this.descricao
@@ -58,7 +60,7 @@ export default {
       method: "get",
       url:
         "http://localhost:51917/api/pessoaJuridica/" +
-        localStorage.getItem("idAdm"),
+        localStorage.getItem("idAdm") + "/",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token")
       }
@@ -66,20 +68,6 @@ export default {
         this.pessoaJuridica = response.data;
         console.log(this.pessoaJuridica);
         console.info(response.data[0]["cnpj"]);
-      })
-      .catch(error => console.log(error));
-
-
-
-    return axios({
-        method: "get",
-        url: "http://localhost:51917/api/categoria/",
-        headers: {
-            Authorization: "Bearer " + localStorage.getItem("token")
-        }
-    }).then(response => {
-        this.pessoaJuridica = response.data;
-        console.log(this.pessoaJuridica);
       })
       .catch(error => console.log(error));
   }

@@ -15,6 +15,7 @@ import listProf from'@/components/listProf';
 import cadAdm from'@/components/cadAdm';
 import cadPessoaJud from'@/components/cadPessoaJud';
 import login from'@/components/login';
+import altPJ from '@/components/altPJ'
 
 Vue.use(Router);
 
@@ -94,6 +95,11 @@ export default new Router({
       path:'/',
       name:'login',
       component:login
+    },
+    {
+    path: '/altPJ',
+    name: 'alterarPJ',
+    component: altPJ
     }
   ],
 });

@@ -3,10 +3,11 @@
     <img center id="md" src="@/assets/imagens/LOGO-oficial.png"/>
   <h2>Empresas</h2>  
   <h3>Lista</h3>
-   <div class="listas" method="getd">
-      <b-table   hover :items="pessoaJuridica" :fields="fields" @click="updateSelected(fields)"></b-table>
+   <div class="listas" method="get">
+      <b-table v-model="selected" :value="pessoaJuridica.id" hover :items="pessoaJuridica"
+      :fields="fields" @row-clicked="updateSelected(pessoaJuridica)"></b-table>
    </div>
-  
+  {{selected}}
     </div>
 </template>
 
@@ -17,6 +18,8 @@ export default {
   data() {
     return {
       pessoaJuridica: [],
+      selected: "",
+      item: '',
       fields: [
         { key: "nomeFantasia", sortable: true, label: "Nome Fantasia" },
         { key: "endereco", sortable: true, label: "Endereço" },
@@ -26,24 +29,26 @@ export default {
     };
   },
   methods: {
-   updateSelected (selectedItem) {
-        this.selectedField = selectedItem;
-        this.showPlaces = true;
+   updateSelected (item) {
+        this.item = item;
+        console.log(item[0].id)
+        localStorage.setItem("idPJ", item[0].id);
+        this.$router.push("/altPJ");
+        // push para outra tela para este id como parametro
      }
   },
   mounted() {
     return axios({
       method: "get",
-      url:
-        "http://athenasapi.azurewebsites.net/api/pessoaJuridica/" +
-        localStorage.getItem("idAdm"),
+      url: "http://localhost:51917/api/pessoaJuridica/" + localStorage.getItem("idAdm"),
+      //url: "http://athenasapi.azurewebsites.net/api/pessoaJuridica/" + localStorage.getItem("idAdm"),
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token")
       }
     })
       .then(response => {
         this.pessoaJuridica = response.data;
-        console.log(this.pessoaJuridica);
+        // console.log(this.pessoaJuridica);
       })
       .catch(error => console.log(error));
   },
