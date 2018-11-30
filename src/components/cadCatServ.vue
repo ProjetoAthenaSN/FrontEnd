@@ -26,7 +26,7 @@
         </b-form-input>
       </b-form-group>
       <b-form-group>
-        <b-form-select v-model="selected" class="mb-3" placeholder="hsddvkvjhnb:">
+        <b-form-select v-model="selected" class="mb-3">
           <option v-for="pj in pessoaJuridica" :value="pj.id">{{pj.nomeFantasia}}</option>
         </b-form-select>
        <!-- :options="pessoaJuridica" -->
