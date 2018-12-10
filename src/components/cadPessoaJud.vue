@@ -47,7 +47,7 @@
             </div>
             <div class="form-row">
               <div class="form-group col-md-5"> 
-                <b-form-input type="text" v-model="endereco.cidade" placeholder="Cidade:" id="form´s"></b-form-input>
+                <b-form-input type="text" v-model="endereco.localidade" placeholder="Cidade:" id="form´s"></b-form-input>
               </div>
               <div class="form-group col-md-5">
                 <b-form-input type="text" v-model="endereco.uf" placeholder="UF:" id="form´s"></b-form-input>
@@ -121,7 +121,7 @@ export default {
 
       return axios({
         method: "post",
-        url: "http://localhost:51917/api/token",
+        url: "http://localhost:51917/api/pessoaJuridica/" + localStorage.getItem("idAdm"),
       //url: "http://athenasapi.azurewebsites.net/api/pessoaJuridica/" + localStorage.getItem("idAdm"),
         data: {
           cnpj: this.cnpj,
@@ -132,7 +132,7 @@ export default {
             {
               cep: this.endereco.cep,
               bairro: this.endereco.bairro,
-              cidade: this.endereco.cidade,
+              localidade: this.endereco.localidade,
               uf: this.endereco.uf,
               logradouro: this.endereco.logradouro,
               numero: this.endereco.numero,
@@ -159,11 +159,10 @@ fetchCep(){
       .then(response => {
           this.endereco.logradouro= response.data.logradouro;
           this.endereco.bairro= response.data.bairro;
-          this.endereco.localidade= response.data.cidade;
+          this.endereco.localidade= response.data.localidade;
           this.endereco.uf= response.data.uf;
           console.log(this.cep);
           console.log(response.data);
-          alert("heyyyyy");
         })
         .catch(error => {
           console.log(

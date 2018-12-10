@@ -5,37 +5,49 @@
   <h3>Configuração dos dias</h3>
   <b-form>
     <b-form-group>
-      <b-form-select v-model="selected1" class="mb-3" id="form´s">
-          <option v-for="pj in pessoaJuridica" :value="pj.id">{{pj.nomeFantasia}}</option>
-      </b-form-select>
-  
-        <b-form-select v-model="selected2" class="mb-3" id="form´s">
-          <option v-for="ct in categoria" :value="ct.id">{{ct.Nome}}</option>
+       {{"selecione uma empresa a qual deseja vincular o cadastro"}}
+       <b-form-select v-model="selecionePJ" class="mb-3" id="form´s" @change="buscarCT()">
+       <option v-for="pj in pessoaJuridica" :value="pj.id">{{pj.nomeFantasia}}</option>
         </b-form-select>
 
-        <b-form-select v-model="selected3" class="mb-3" id="form´s">
-          <option v-for="sv in Serviço" :value="sv.id">{{sv.nome}}</option>
+        {{"selecione uma categoria da empresa selecionada a qual deseja vincular o cadastro"}}
+        <b-form-select v-model="selecioneCT" class="mb-3" id="form´s" @change="buscarCT()">
+        <option v-for="ct in categoria" :value="ct.id">{{ct.nome}}</option>
         </b-form-select>
+
+        {{"Selecione um serviço da empresa selecionada a qual deseja vincular"}}
+         <b-form-select v-model="selecioneSV" class="mb-3" id="form´s" @change="buscarSV()">
+         <option v-for="sv in servico" :value="sv.id">{{sv.nome}}</option>
+        </b-form-select>
+
+        {{"selecione um funcionario da empresa selecionada a qual deseja vincular"}}
+         <b-form-select v-model="selecionePF" class="mb-3" id="form's" @change="buscarPF()">
+        <option v-for="pf in profissionais" :value="pf.id">{{pf.nome}}</option>                
+        </b-form-select>    
+
       <b-breadcrumb :items="items" id="links"/>
     </b-form-group>
   </b-form>
    <b-button href="#" variant="primary" id="">Cadastrar</b-button>
-   <p>
-   <router-link v-bind:to="{ name: 'menu' }" class="card-text" id="x">X</router-link>
-   </p>
+  
 
     </div>
 </template>
 
 <script>
+import axios from "axios"
 /*import "./assets/stylesheets/main.css";*/
 export default {
   data () {
     return {
-      selected: "",
+       selecionePJ:"",
+        selecioneCT:"",
+        selecioneSV:"",
+        selelecionePF:"",
       pessoaJuridica:[],
       categoria:[],
       servico:[],
+      profissionais:[],
       items: [{
         text: 'Dom',
         disabled: false
@@ -86,25 +98,37 @@ export default {
         buscarPJ(){
             return axios({
                 method: "get",
-                url:"http://localhost:51917/api/pessoaJuridica/" + localStorage.getItem("idAdm")
+                url:"http://localhost:51917/api/pessoaJuridica/" + localStorage.getItem("idAdm"),
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
             }).then(response =>{
                 this.pessoaJuridica = response.data;
                 console.log(this.pessoaJuridica);
             }).catch(error => console.log(error));
         },
-        buscarCat(){
-            return axios({
-                method: "get",
-                url:"http://localhost:51917/api/categoria/" + localStorage.getItem("idAdm")
-            }).then(response =>{
-                this.categoria = response.data;
-                console.log(this.categoria);
-            }).catch(error => console.log(error));
+        buscarCT(){
+            let idPj = this.selecionePJ;
+             return axios({
+                 method: "get",
+            // idPJ será o valor do primeiro select
+                 url:"http://localhost:51917/api/categoria/" + localStorage.getItem("idAdm") +  "/" + idPj,
+                 headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+             }).then(response =>{
+                 this.categoria = response.data;
+                 console.log("--------------------------------------------------------------" +this.categoria);
+             }).catch(error => console.log(error));
         },
-        buscarServ(){
+        buscarSV(){
+            let idct = this.selecioneCT;
             return axios({
                  method:"get",
-                  url:"http://localhost:51917/api/servico/" + localStorage.getItem("idAdm")
+                  url:"http://localhost:51917/api/servico/" + localStorage.getItem("idAdm") + "/" + idct,
+                  headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
             }).then(response =>{
                  this.servico = response.data;
                 console.log(this.servico);
@@ -113,9 +137,8 @@ export default {
     },
     mounted(){
         this.buscarPJ();
-        this.buscarCat();
-        this.buscarServ();
-        
+        this.buscarCT();
+        this.buscarSV();
     }
 }
 </script>

@@ -1,28 +1,31 @@
 <template>
   <div class="formCadServ"> 
-    <img center id="md" src="@/assets/imagens/LOGO-oficial.png"/>
-   <h2>Serviços</h2> 
-  <h3>Cadastro</h3>
-  <b-form @submit="onSubmit">
-  <b-form-group>
-  <b-form-input v-model="nome" type="text" placeholder="Nome:" id="form´s"></b-form-input>
-  <b-form-input v-model="descricao" type="text" placeholder="Descrição:" id="form´s"></b-form-input>
-  
-  <b-form-select v-model="selected" class="mb-3" id="form´s" @change="buscarCat(pj.id)">
-          <option v-for="pj in pessoaJuridica" :value="pj.id">{{pj.nomeFantasia}}</option>
-        </b-form-select>
+        <img center id="md" src="@/assets/imagens/LOGO-oficial.png"/>
+        <h2>Serviços</h2> 
+        <h3>Cadastro</h3>
+        <b-form @submit="onSubmit">
+            <b-form-group>
+                <b-form-input v-model="nome" type="text" placeholder="Nome:" id="form´s"></b-form-input>
+                <b-form-input v-model="descricao" type="text" placeholder="Descrição:" id="form´s"></b-form-input>
+                
+                <b-form-select v-model="selecionePJ" class="mb-3" id="form´s" @change="buscarCT()">
+                    <option v-for="pj in pessoaJuridica" :value="pj.id">{{pj.nomeFantasia}}</option>
+                </b-form-select>
+                        {{"selecione uma empresa a qual deseja vincular o cadastro"}}
 
-    <b-form-select v-model="categoria" class="mb-3">
-          <option v-for="cat in categoria" v-bind:value="cat.id">{{cat.nome}}</option>
-        </b-form-select>
-  </b-form-group>
-  <b-button href="#" type="submit" variant="primary" id="">Cadastrar</b-button>
-  </b-form>
-  	
-   <p>
-   <router-link v-bind:to="{ name: 'menu' }" class="card-text" id="x">X</router-link>
-   </p>
-
+                <b-form-select v-model="selecioneCT" class="mb-3" id="form´s" @change="buscarCT()">
+                    <option v-for="ct in categoria" :value="ct.id">{{ct.nome}}</option>
+                </b-form-select>
+                        {{"selecione uma categoria da empresa selecionada a qual deseja vincular o cadastro"}}
+                        <br />
+                        <br />
+                <b-button type="submit" variant="primary" id="">Cadastrar</b-button>
+            </b-form-group>
+        </b-form>
+            
+        <p>
+        <router-link v-bind:to="{ name: 'menu' }" class="card-text" id="x">X</router-link>
+        </p>
     </div>
 </template>
 
@@ -33,11 +36,12 @@ export default {
   name: 'Servico',
   data () {
     return {
-      selected: "",
-      pessoaJuridica: [],
-      categoria: [],
-      nome: "",
-      descricao: ""
+        selecionePJ:"",
+        selecioneCT:"",
+        pessoaJuridica: [],
+        categoria: [],
+        nome: "",
+        descricao: ""
     }
   },
   methods: {
@@ -45,7 +49,7 @@ export default {
       evt.preventDefault();
       return axios({
         method: "post",
-        url: "http://localhost:51917/api/servico/" + localStorage.getItem("idAdm") + "/",
+        url: "http://localhost:51917/api/servico/" + localStorage.getItem("idAdm") + "/" + this.selecioneCT,
         data: {
           nome: this.nome,
           descricao: this.descricao
@@ -55,7 +59,7 @@ export default {
         }
       }).then;
     },
-     buscarPJ(){
+    buscarPJ(){
             return axios({
                 method: "get",
                 url:"http://localhost:51917/api/pessoaJuridica/" + localStorage.getItem("idAdm"),
@@ -66,11 +70,27 @@ export default {
                 this.pessoaJuridica = response.data;
                 console.log(this.pessoaJuridica);
             }).catch(error => console.log(error));
-        }
+        },
+        buscarCT(){
+            let idPj = this.selecionePJ;
+             return axios({
+                 method: "get",
+            // idPJ será o valor do primeiro select
+                 url:"http://localhost:51917/api/categoria/" + localStorage.getItem("idAdm") +  "/" + idPj,
+                 headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+             }).then(response =>{
+                 this.categoria = response.data;
+                 console.log("--------------------------------------------------------------" +this.categoria);
+             }).catch(error => console.log(error));
+        },
   },
-  mounted() {
-    this.buscarPJ();
-  }
+  mounted(){
+        this.buscarPJ();
+        this.buscarCT();
+        
+    }
 };
 </script>
 

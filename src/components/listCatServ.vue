@@ -8,15 +8,15 @@
         <b-form-select v-model="selected" class="mb-3" @change="buscarCT()">
           <option v-for="pj in pessoaJuridica" :value="pj.id">{{pj.nomeFantasia}}</option>
         </b-form-select>
-
+      {{"selecione uma empresa a qual deseja vincular"}}
         <b-table
           v-model="select"
           :value="categoria.id"
           hover
           :items="categoria"
           :fields="fields"
-          @row-clicked="updateSelected(categoria)"
-        ></b-table>
+          @row-clicked="updateSelected(categoria)">
+        </b-table>
       </div>
     </div>
   </div>
@@ -44,8 +44,8 @@ export default {
     updateSelected(item) {
       this.item = item;
       console.log(item[0].id);
-      localStorage.setItem("idPJ", item[0].id);
-      this.$router.push("/altPJ");
+      localStorage.setItem("idCat", item[0].id);
+      this.$router.push("/altCat");
       // push para outra tela para este id como parametro
     },
     buscarPJ() {

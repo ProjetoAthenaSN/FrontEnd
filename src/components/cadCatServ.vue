@@ -29,6 +29,7 @@
         <b-form-select v-model="selected" class="mb-3">
           <option v-for="pj in pessoaJuridica" :value="pj.id">{{pj.nomeFantasia}}</option>
         </b-form-select>
+        {{"selecione uma empresa a qual deseja vincular o cadastro"}}
        <!-- :options="pessoaJuridica" -->
       </b-form-group>
 

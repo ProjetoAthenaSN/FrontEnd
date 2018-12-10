@@ -1,42 +1,38 @@
 <template>
-  <div class="formCadProf">
-    <p>
-      <router-link v-bind:to="{ name: 'menu' }" class="card-text" id="x">X</router-link>
-    </p>
-    <img center id="md" src="@/assets/imagens/LOGO-oficial.png">
-    <h2>Profissionais</h2>
-    <h3>Cadastro</h3>
-    <b-form @submit="onSubmit" >
-      <b-form-group>
-        <b-form-input v-model="nomeCompleto" type="text" placeholder="Nome Completo:" id="form´s"></b-form-input>
-        <b-form-input v-model="email" type="text" placeholder="E-mail:" id="form´s"></b-form-input>
+    <div class="formCadProf">
+        <p>
+        <router-link v-bind:to="{ name: 'menu' }" class="card-text" id="x">X</router-link>
+        </p>
+        <img center id="md" src="@/assets/imagens/LOGO-oficial.png">
+        <h2>Profissionais</h2>
+        <h3>Cadastro</h3>
+        <b-form @submit="onSubmit" >
+            <b-form-group>
+                <b-form-input v-model="nomeCompleto" type="text" placeholder="Nome Completo:" id="form´s"></b-form-input>
+                <b-form-input v-model="email" type="text" placeholder="E-mail:" id="form´s"></b-form-input>
 
-        <!--  -->
-        <b-form-select v-model="selecionePJ" class="mb-3" id="form´s" @change="buscarCT()">
-          <option v-for="pj in pessoaJuridica" :value="pj.id">{{pj.nomeFantasia}}</option>
-        </b-form-select>
-        {{"idPj      "+selecionePJ}}
+                <!--  -->
+                 {{"selecione uma empresa a qual deseja vincular o cadastro"}}
+                <b-form-select v-model="selecionePJ" class="mb-3" id="form´s" @change="buscarCT()">
+                <option v-for="pj in pessoaJuridica" :value="pj.id">{{pj.nomeFantasia}}</option>
+                </b-form-select>
+               
+                <b-form-select v-model="selecioneCT" class="mb-3" id="form´s" @change="buscarCT()">
+                <option v-for="ct in categoria" :value="ct.id">{{ct.nome}}</option>
+                </b-form-select>
+                {{"selecione uma categoria da empresa selecionada a qual deseja vincular o cadastro"}}
 
-        <b-form-select v-model="selecioneCT" class="mb-3" id="form´s" @change="buscarCT()">
-          <option v-for="ct in categoria" :value="ct.id">{{ct.nome}}</option>
-        </b-form-select>
-        {{selecioneCT}}
+                <b-form-select v-model="selecioneSV" class="mb-3" id="form´s" @change="buscarSV()">
+                <option v-for="sv in servico" :value="sv.id">{{sv.nome}}</option>
+                </b-form-select>
 
-        <b-form-select v-model="selecioneSV" class="mb-3" id="form´s" @change="buscarCT()">
-          <option v-for="sv in servico" :value="sv.id">{{sv.nome}}</option>
-        </b-form-select>
-        {{selecioneSV}}
-      </b-form-group>
-    </b-form>
-
-    <b-button href="#" type="submit" variant="primary" id>Cadastrar</b-button>
-  </div>
+                <b-button type="submit" variant="primary" id>Cadastrar</b-button>
+            </b-form-group>
+        </b-form>
+    </div>
 </template>
 
 <script>
-
-
-
 import axios from "axios"
 /*import "./assets/stylesheets/main.css";*/
 export default {
@@ -59,7 +55,7 @@ export default {
 
           return axios({
               method: "post",
-              url:"http://localhost:51917/api/profissional/" + localStorage.getItem("idAdm") + "/" + this.servico,
+              url:"http://localhost:51917/api/profissional/" + localStorage.getItem("idAdm") + "/" + this.selecioneSV,
               data: {
                   nomeCompleto: this.nomeCompleto,
                   email: this.email
@@ -92,7 +88,7 @@ export default {
                  console.log("--------------------------------------------------------------" +this.categoria);
              }).catch(error => console.log(error));
         },
-        buscarServ(){
+        buscarSV(){
             let idct = this.selecioneCT;
             return axios({
                  method:"get",

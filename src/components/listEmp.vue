@@ -1,13 +1,13 @@
 <template>
     <div class="listaServico"> 
-    <img center id="md" src="@/assets/imagens/LOGO-oficial.png"/>
-  <h2>Empresas</h2>  
-  <h3>Lista</h3>
-   <div class="listas" method="get">
-      <b-table v-model="selected" :value="pessoaJuridica.id" hover :items="pessoaJuridica"
-      :fields="fields" @row-clicked="updateSelected(pessoaJuridica)"></b-table>
-   </div>
-  {{selected}}
+      <img center id="md" src="@/assets/imagens/LOGO-oficial.png"/>
+      <h2>Empresas</h2>  
+      <h3>Lista</h3>
+      <div class="listas" method="get">
+        <b-table v-model="selected" :value="pessoaJuridica.id" hover :items="pessoaJuridica"
+        :fields="fields" @row-clicked="updateSelected(pessoaJuridica)"></b-table>
+      </div>
+      <p>Seleciona alguma de suas empresas para alterar deus dados</p>
     </div>
 </template>
 
@@ -29,13 +29,13 @@ export default {
     };
   },
   methods: {
-   updateSelected (item) {
-        this.item = item;
-        console.log(item[0].id)
-        localStorage.setItem("idPJ", item[0].id);
-        this.$router.push("/altPJ");
+    updateSelected (item) {
+      this.item = item;
+      console.log(item[0].id)
+      localStorage.setItem("idPJ", item.id);
+      this.$router.push("/altPJ");
         // push para outra tela para este id como parametro
-     }
+    }
   },
   mounted() {
     return axios({

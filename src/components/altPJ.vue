@@ -65,7 +65,7 @@
       </div>
 
     <b-button type="submit" variant="primary">Cadastrar</b-button>
-    <b-button type="submit" @click="del" variant="primary">deletar</b-button>
+    <b-button @click="del" variant="primary">deletar</b-button>
     
     </b-form>
     
@@ -110,9 +110,6 @@ export default {
         }
       ]
     };
-  },
-  created() {
-    //alert("Pessoa Juridica Cadastrada!")
   },
   methods: {
     onSubmit(evt) {

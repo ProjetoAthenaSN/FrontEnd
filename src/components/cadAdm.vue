@@ -33,12 +33,14 @@
           </b-form-input>
         </b-form-group>
         <b-nav fill tabs id="navegationAdm">
-              <b-nav-item> <router-link v-bind:to="{ name: 'login' }" class="card-text" id="links">Login
+              <b-nav-item><router-link v-bind:to="{ name: 'login' }" class="card-text" id="links">Login
+            </router-link></b-nav-item>
+              <b-nav-item> <router-link v-bind:to="{ name: 'cadAdm' }" class="card-text" id="links">Cadastrar
             </router-link></b-nav-item>
             </b-nav>
 
         <b-button-group size="sm">
-                  <b-button id="cadastrar" type="submit" v-for="btn in buttons" :pressed.sync="btn.state" :variant="btn.variant" :key="btn.variant">
+                  <b-button id="cadastrar" type="submit" v-for="btn in buttons" :pressed.sync="btn.state" :variant="btn.variant" :key="btn.variant" @click="login">
                     {{ btn.caption }}
                   </b-button>
                 </b-button-group>
@@ -69,45 +71,43 @@ export default {
       //alert("Administrador Cadastrado!");
       return axios({
         method: "post",
-        url: "http://localhost:51917/api/token",
         url: "http://localhost:51917/api/administrador",
-      //url: "http://athenasapi.azurewebsites.net/api/administrador",
+        //url: "http://athenasapi.azurewebsites.net/api/administrador",
         data: {
           NomeCompleto: this.NomeCompleto,
           Email: this.email,
           Senha: this.senha
         },
-       
-      }).then((response) => {
-        console.info(response.data);
-        const token = response.data.token;
-        localStorage.setItem("token", response.data.token);
-        console.log(response.data.token)
-       this.$router.push('/cadPessoaJud');
-      }).catch(err => {
-        this.erro = 'Dados incorretos';
-      });
-      
-      
-    }/*,
-    login() {
-     axios({
+       login(){
+        axios({
        url: "http://localhost:51917/api/token",
-      // url: "http://athenasapi.azurewebsites.net/api/token",
+       //url: "https://athenasapi.azurewebsites.net/api/token",
        method: "POST",
        data: {
          Email: this.email,
-         Senha: this.senha
+         Senha: this.password
        }
      })
       .then(response =>{
         const token = response.data.token;
         localStorage.setItem("token", response.data.token);
         console.log(response.data.token)
+        this.$router.push("/menu");
       })
       .catch(err => {
+        this.erro = 'E-mail ou senha inválidos';
+        });
+       },
+
+      }).then((response) => {
+        console.info(response.data);
+       this.$router.push('/cadPessoaJud');
+      }).catch(err => {
+        this.erro = 'Dados incorretos';
       });
-    },*/
+      
+      
+    }
   }
 };
 
