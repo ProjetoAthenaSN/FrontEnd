@@ -79,6 +79,7 @@ export default {
   name: "cadPessoaJud",
   data() {
     return {
+      erro: "",
       cnpj: "",
       nomeFantasia: "",
       horarioInicial: "",
@@ -116,9 +117,10 @@ export default {
   },
   methods: {
     onSubmit(evt) {
-      console.log("ei");
+      console.log(this.endereco.cep);
+      console.info("http://localhost:51917/api/pessoaJuridica/" + localStorage.getItem("idAdm"));
       evt.preventDefault();
-
+      
       return axios({
         method: "post",
         url: "http://localhost:51917/api/pessoaJuridica/" + localStorage.getItem("idAdm"),
@@ -130,7 +132,7 @@ export default {
           horarioFinal: this.horarioFinal,
           endereco: [
             {
-              cep: this.endereco.cep,
+              cep: this.buscarCep,
               bairro: this.endereco.bairro,
               localidade: this.endereco.localidade,
               uf: this.endereco.uf,
@@ -148,13 +150,14 @@ export default {
         }
       })
         .then(res => this.$router.push("/menu"))
-        .catch(err => console.log(err));
+        .catch(err => {console.log(err)
+        console.log("heyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"+data);});
     },
     
 fetchCep(){
       return axios({
         method: 'get',
-        url: 'https://cors-anywhere.herokuapp.com/https://viacep.com.br/ws/'+this.buscarCep+'/json/'
+        url: 'https://viacep.com.br/ws/'+this.buscarCep+'/json/'
       })
       .then(response => {
           this.endereco.logradouro= response.data.logradouro;

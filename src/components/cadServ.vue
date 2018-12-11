@@ -8,10 +8,12 @@
                 <b-form-input v-model="nome" type="text" placeholder="Nome:" id="form´s"></b-form-input>
                 <b-form-input v-model="descricao" type="text" placeholder="Descrição:" id="form´s"></b-form-input>
                 
-                <b-form-select v-model="selecionePJ" class="mb-3" id="form´s" @change="buscarCT()">
+                <b-form-select v-model="selecionePJ" class="mb-3" id="form´s" @change.native="buscarCT()">
+                    <option value="0">Selecione</option>
                     <option v-for="pj in pessoaJuridica" :value="pj.id">{{pj.nomeFantasia}}</option>
                 </b-form-select>
                         {{"selecione uma empresa a qual deseja vincular o cadastro"}}
+                        {{selecionePJ}}
 
                 <b-form-select v-model="selecioneCT" class="mb-3" id="form´s" @change="buscarCT()">
                     <option v-for="ct in categoria" :value="ct.id">{{ct.nome}}</option>
@@ -20,6 +22,7 @@
                         <br />
                         <br />
                 <b-button type="submit" variant="primary" id="">Cadastrar</b-button>
+                <b-button @click="buscarCT()" variant="primary" id="">Valor PJ</b-button>
             </b-form-group>
         </b-form>
             
@@ -59,7 +62,29 @@ export default {
         }
       }).then;
     },
-    buscarPJ(){
+        buscarCT(){
+             let app = this;
+
+
+            if(app.selecionePJ != ''){
+             console.log("PJ - " + app.selecionePJ)
+
+                return axios({
+                    method: "get",
+                // idPJ será o valor do primeiro select
+                    url:"http://localhost:51917/api/categoria/" + localStorage.getItem("idAdm") +  "/" +  app.selecionePJ,
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token")
+                    }
+                }).then(response =>{
+                    this.categoria = response.data;
+                    console.log("-----------------------------" +this.categoria);
+                }).catch(error => console.log(error));
+             } else {
+                 app.selecionePJ = "0"
+             }
+        },    
+        buscarPJ(){
             return axios({
                 method: "get",
                 url:"http://localhost:51917/api/pessoaJuridica/" + localStorage.getItem("idAdm"),
@@ -69,21 +94,7 @@ export default {
             }).then(response =>{
                 this.pessoaJuridica = response.data;
                 console.log(this.pessoaJuridica);
-            }).catch(error => console.log(error));
-        },
-        buscarCT(){
-            let idPj = this.selecionePJ;
-             return axios({
-                 method: "get",
-            // idPJ será o valor do primeiro select
-                 url:"http://localhost:51917/api/categoria/" + localStorage.getItem("idAdm") +  "/" + idPj,
-                 headers: {
-                    Authorization: "Bearer " + localStorage.getItem("token")
-                }
-             }).then(response =>{
-                 this.categoria = response.data;
-                 console.log("--------------------------------------------------------------" +this.categoria);
-             }).catch(error => console.log(error));
+            }).catch(error => {console.log(error)});
         },
   },
   mounted(){

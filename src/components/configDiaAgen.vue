@@ -1,6 +1,6 @@
 <template>
   <div class="formCDA"> 
-    <img center id="md" src="@/assets/imagens/LOGO-oficial.png"/>
+    <img center id="md" src="@/assets/imagens/LOGO-oficial.png" style="width= 60%">
     <h2>Agendamentos</h2>
   <h3>Configuração dos dias</h3>
   <b-form>
