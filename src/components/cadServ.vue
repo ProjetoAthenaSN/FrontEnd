@@ -8,9 +8,9 @@
         <b-form-input v-model="nome" type="text" placeholder="Nome:" id="form´s"></b-form-input>
         <b-form-input v-model="descricao" type="text" placeholder="Descrição:" id="form´s"></b-form-input>
 
-        <b-form-select v-model="selecionePJ" class="mb-3" id="form´s" @change="buscarCT()">
+        <b-form-select class="mb-3" id="form´s" @change.native="myChange" v-model="selecionePJ">
           <option value="0">Selecione</option>
-          <option v-for="pj in pessoaJuridica" :value="pj.id">{{pj.nomeFantasia}}</option>
+          <option v-for="pj in pessoaJuridica" :key="pj.id" :value="pj.id">{{pj.nomeFantasia}}</option>
         </b-form-select>
         {{"selecione uma empresa a qual deseja vincular o cadastro"}}
         {{selecionePJ}}
@@ -64,14 +64,15 @@ export default {
         }
       }).then;
     },
-    buscarCT() {
+    myChange(evt) {
+      let val = evt.target.value;
       return axios({
         method: "get",
         url:
           "http://localhost:51917/api/categoria/" +
           localStorage.getItem("idAdm") +
           "/" +
-          this.selecionePJ,
+          val,
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token")
         }
@@ -93,7 +94,6 @@ export default {
       })
         .then(response => {
           this.pessoaJuridica = response.data;
-          console.log(this.pessoaJuridica);
         })
         .catch(error => {
           console.log(error);
