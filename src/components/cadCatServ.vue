@@ -26,8 +26,8 @@
         </b-form-input>
       </b-form-group>
       <b-form-group>
-        <b-form-select v-model="selected" class="mb-3">
-          <option v-for="pj in pessoaJuridica" :value="pj.id">{{pj.nomeFantasia}}</option>
+        <b-form-select @change.native="myChange" v-model="selecionePJ" class="mb-3">
+          <option v-for="pj in pessoaJuridica" :key="pj.id"  :value="pj.id">{{pj.nomeFantasia}}</option>
         </b-form-select>
         {{"selecione uma empresa a qual deseja vincular o cadastro"}}
        <!-- :options="pessoaJuridica" -->
@@ -47,7 +47,7 @@ export default {
   name: "cadCatServ",
   data() {
     return {
-      selected: "",
+      selecionePJ: "",
       pessoaJuridica: [],
       nome: "",
       descricao: ""
@@ -59,7 +59,7 @@ export default {
      
       return axios({
         method: "post",
-        url: "http://localhost:51917/api/categoria/" + localStorage.getItem("idAdm") + "/" + this.selected,
+        url: "http://localhost:51917/api/categoria/" + localStorage.getItem("idAdm") + "/" + this.selecionePJ,
         data: {
           nome: this.nome,
           descricao: this.descricao
@@ -84,7 +84,7 @@ export default {
         this.pessoaJuridica = response.data;
         console.log(this.pessoaJuridica);
         console.info(response.data[0]["cnpj"]);
-         console.log("---------------"+selected);
+         console.log("---------------"+selecionePJ);
       })
       .catch(error => console.log(error));
   }

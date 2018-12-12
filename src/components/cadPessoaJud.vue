@@ -130,7 +130,7 @@ export default {
           nomeFantasia: this.nomeFantasia,
           horarioInicial: this.horarioInicial,
           horarioFinal: this.horarioFinal,
-          endereco: [
+          endereco: 
             {
               cep: this.buscarCep,
               bairro: this.endereco.bairro,
@@ -139,8 +139,7 @@ export default {
               logradouro: this.endereco.logradouro,
               numero: this.endereco.numero,
               complemento: this.endereco.complemento
-            }
-          ],
+            },
           tiposJuridico: this.tiposJuridico
         },
         headers: {
@@ -151,7 +150,8 @@ export default {
       })
         .then(res => this.$router.push("/menu"))
         .catch(err => {console.log(err)
-        console.log("heyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"+data);});
+        // console.log("heyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"+data);
+        });
     },
     
 fetchCep(){

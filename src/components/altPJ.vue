@@ -22,7 +22,7 @@
                     min="9:00" max="18:00" required />
             <div class="form-row">
             <div class="form-group col-md-5">
-                <b-form-input type="text" v-model="buscarCep" placeholder="CEP:" id="form´s"></b-form-input>
+                <b-form-input type="text" v-model="endereco.buscarCep" placeholder="CEP:" id="form´s"></b-form-input>
                 <div class="col-md-5">
                  <b-button @click="fetchCep" class="btncep">Buscar</b-button>
                 </div>
@@ -47,7 +47,7 @@
             </div>
             <div class="form-row">
               <div class="form-group col-md-5"> 
-                <b-form-input type="text" v-model="endereco.cidade" placeholder="Cidade:" id="form´s"></b-form-input>
+                <b-form-input type="text" v-model="endereco.localidade" placeholder="Cidade:" id="form´s"></b-form-input>
               </div>
               <div class="form-group col-md-5">
                 <b-form-input type="text" v-model="endereco.uf" placeholder="UF:" id="form´s"></b-form-input>
@@ -65,7 +65,7 @@
       </div>
 
     <b-button type="submit" variant="primary">Cadastrar</b-button>
-    <b-button @click="del" variant="primary">deletar</b-button>
+    <b-button @click="del" variant="primary" method="delete">deletar</b-button>
     
     </b-form>
     
@@ -85,15 +85,15 @@ export default {
       horarioFinal: "",
       buscarCnpj: "",
       buscarCep: "",
-      endereco: {
+      endereco: [{
         cep: "",
         bairro: "",
-        cidade: "",
+        localidade: "",
         uf: "",
         logradouro: "",
         numero: "",
         complemento: ""
-      },
+      }],
       tiposJuridico: "Selecione uma opção",
       options: [
         {
@@ -126,17 +126,16 @@ export default {
           nomeFantasia: this.nomeFantasia,
           horarioInicial: this.horarioInicial,
           horarioFinal: this.horarioFinal,
-          endereco: [
+          endereco: 
             {
-              cep: this.endereco.cep,
+              cep: this.endereco.buscarCep,
               bairro: this.endereco.bairro,
-              cidade: this.endereco.cidade,
+              localidade: this.endereco.localidade,
               uf: this.endereco.uf,
               logradouro: this.endereco.logradouro,
               numero: this.endereco.numero,
               complemento: this.endereco.complemento
-            }
-          ],
+            },
           tiposJuridico: this.tiposJuridico
         },
         headers: {
@@ -149,15 +148,16 @@ export default {
         .catch(err => console.log(err));
     },
     del(){
+      alert("jsdhvkjsbdvjk")
         return axios({
-            method: "delete",
+            method: "DELETE",
             url: "localhost:51917/api/pessoaJuridica/" + localStorage.getItem("idAdm") + "/" + localStorage.getItem("idPJ"),
             headers:{
                 Authorization: "Bearer " + localStorage.getItem("token")
             }
         }).then(response => {
           console.log(response.data);
-          alert("heyyyyy foi vacilao");
+          localStorage.removeItem("idPJ");
         })
     },
     
@@ -169,17 +169,16 @@ fetchCep(){
       .then(response => {
           this.endereco.logradouro= response.data.logradouro;
           this.endereco.bairro= response.data.bairro;
-          this.endereco.localidade= response.data.cidade;
+          this.endereco.localidade= response.data.localidade;
           this.endereco.uf= response.data.uf;
           console.log(this.cep);
           console.log(response.data);
-          alert("heyyyyy");
         })
         .catch(error => {
-          console.log(
-            "você errou aqui: " + error + " ó " + error.response.data,
-            this.erro="cep está errado"
-          );
+          // console.log(
+          //   "você errou aqui: " + error + " ó " + error.response.data,
+          //   this.erro="cep está errado"
+          // );
           // jogar para um span - um warning de erro
          
         });
@@ -211,20 +210,19 @@ fetchCep(){
         this.buscarCnpj= response.data.cnpj;
         this.horarioInicial= response.data.horarioInicial;
         this.horarioFinal= response.data.horarioFinal;
-        this.buscarCep= response.data.cep;
         this.tiposJuridico= response.data.tiposJuridico;
 
-        this.endereco.cep= response.data.cep;
-        this.endereco.logradouro= response.data.logradouro;
-        this.endereco.uf= response.data.uf;
-        this.endereco.bairro= response.data.bairro;
-        this.endereco.localidade= response.data.localidade;
-        this.endereco.numero= response.data.numero;
-        this.endereco.complemento= response.data.complemento;
+        this.endereco.buscarCep= response.data.endereco.cep;
+        this.endereco.logradouro= response.data.endereco.logradouro;
+        this.endereco.uf= response.data.endereco.uf;
+        this.endereco.bairro= response.data.endereco.bairro;
+        this.endereco.localidade= response.data.endereco.localidade;
+        this.endereco.numero= response.data.endereco.numero;
+        this.endereco.complemento= response.data.endereco.complemento;
 
-        console.log(this.pessoaJuridica);
-        console.info(response.data[0]["cnpj"]);
-         console.log("---------------"+selected);
+        // console.log(this.pessoaJuridica);
+        // console.info(response.data[0]["cnpj"]);
+        //  console.log("---------------"+selected);
       })
       .catch(error => console.log(error));
   }

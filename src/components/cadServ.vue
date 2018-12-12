@@ -9,7 +9,7 @@
         <b-form-input v-model="descricao" type="text" placeholder="Descrição:" id="form´s"></b-form-input>
 
         <b-form-select class="mb-3" id="form´s" @change.native="myChange" v-model="selecionePJ">
-          <option value="0">Selecione</option>
+          <!--option value="0">Selecione</option-->
           <option v-for="pj in pessoaJuridica" :key="pj.id" :value="pj.id">{{pj.nomeFantasia}}</option>
         </b-form-select>
         {{"selecione uma empresa a qual deseja vincular o cadastro"}}

@@ -12,11 +12,11 @@
         <b-form-input v-model="email" type="text" placeholder="E-mail:" id="form´s"></b-form-input>
 
         <!--  -->
-        {{"selecione uma empresa a qual deseja vincular o cadastro"}}
+        
         <b-form-select class="mb-3" id="form´s" @change.native="myChange" v-model="selecionePJ">
           <option v-for="pj in pessoaJuridica" :key="pj.id" :value="pj.id">{{pj.nomeFantasia}}</option>
         </b-form-select>
-        {{selecionePJ}}
+        {{"selecione uma empresa a qual deseja vincular o cadastro"}}
         <b-form-select class="mb-3" id="form´s" @change.native="myChangeCT" v-model="selecioneCT">
           <option v-for="ct in categoria" :key="ct.id" :value="ct.id">{{ct.nome}}</option>
         </b-form-select>
@@ -24,7 +24,8 @@
         <b-form-select v-model="selecioneSV" class="mb-3" id="form´s" @change="buscarSV()">
           <option v-for="sv in servico" :value="sv.id">{{sv.nome}}</option>
         </b-form-select>
-
+        {{"selecione um seviço da categoria selecionada a qual deseja vincular o cadastro"}}
+        <br />
         <b-button type="submit" variant="primary" id>Cadastrar</b-button>
       </b-form-group>
     </b-form>

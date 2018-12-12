@@ -1,14 +1,20 @@
 <template>
-    <div class="listaServico"> 
-      <img center id="md" src="@/assets/imagens/LOGO-oficial.png"/>
-      <h2>Empresas</h2>  
-      <h3>Lista</h3>
-      <div class="listas" method="get">
-        <b-table v-model="selected" :value="pessoaJuridica.id" hover :items="pessoaJuridica"
-        :fields="fields" @row-clicked="updateSelected(pessoaJuridica)"></b-table>
-      </div>
-      <p>Seleciona alguma de suas empresas para alterar deus dados</p>
+  <div class="listaServico">
+    <img center id="md" src="@/assets/imagens/LOGO-oficial.png">
+    <h2>Empresas</h2>
+    <h3>Lista</h3>
+    <div class="listas" method="get">
+      <b-table
+        v-model="selected"
+        :value="pessoaJuridica.id"
+        hover
+        :items="pessoaJuridica"
+        :fields="fields"
+        @row-clicked="updateSelected"
+      ></b-table>
     </div>
+    <p>Seleciona alguma de suas empresas para alterar deus dados</p>
+  </div>
 </template>
 
 <script>
@@ -19,28 +25,27 @@ export default {
     return {
       pessoaJuridica: [],
       selected: "",
-      item: '',
+      item: "",
       fields: [
         { key: "nomeFantasia", sortable: true, label: "Nome Fantasia" },
-        { key: "endereco", sortable: true, label: "Endereço" },
+        { key: "endereco.logradouro", sortable: true, label: "Endereço" },
         { key: "horarioInicial", sortable: true, label: "Horário Inicial" },
         { key: "horarioFinal", sortable: true, label: "Horário Final" }
-      ],
+      ]
     };
   },
   methods: {
-    updateSelected (item) {
-      this.item = item;
-      console.log(item[0].id)
-      localStorage.setItem("idPJ", item.id);
+    updateSelected(item, index) {
+      localStorage.setItem("idPJ", JSON.stringify(item.id).replace(/['"]+/g, ''));
       this.$router.push("/altPJ");
-        // push para outra tela para este id como parametro
-    }
+    },
   },
   mounted() {
     return axios({
       method: "get",
-      url: "http://localhost:51917/api/pessoaJuridica/" + localStorage.getItem("idAdm"),
+      url:
+        "http://localhost:51917/api/pessoaJuridica/" +
+        localStorage.getItem("idAdm"),
       //url: "http://athenasapi.azurewebsites.net/api/pessoaJuridica/" + localStorage.getItem("idAdm"),
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token")
@@ -51,8 +56,8 @@ export default {
         // console.log(this.pessoaJuridica);
       })
       .catch(error => console.log(error));
-  },
-}
+  }
+};
 </script>
 
 <style>
